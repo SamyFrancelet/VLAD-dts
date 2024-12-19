@@ -1,5 +1,5 @@
 board:
-  name: samyf_vlad
+  name: vlad
   vendor: samyf
   socs:
     - name: nrf9151

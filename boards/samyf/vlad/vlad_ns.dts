@@ -6,7 +6,7 @@
 
 /dts-v1/;
 #include <nordic/nrf9151ns_laca.dtsi>
-#include "vlad_common-pinctrl.dtsi"
+#include "vlad_common.dtsi"
 
 / {
 	chosen {

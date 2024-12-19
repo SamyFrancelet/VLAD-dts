@@ -53,9 +53,9 @@ static int sysreg_setup(void)
 
 	/* Save and update */
     err = mfd_npm1300_reg_write(pmic, SYSREG_VBUSIN_BASE, SYSREG_TASKUPDATEILIMSW, 0x01);
-    if (ret < 0) {
-        printk("Failed to save settings. Err: %d\n", ret);
-        return ret;
+    if (err < 0) {
+        LOG_ERR("Could not write TASKUPDATEILIMSW register (err: %d)", err);
+        return err;
     }
 
 	LOG_INF("V_SYS current limit: %d mA\n", 500);

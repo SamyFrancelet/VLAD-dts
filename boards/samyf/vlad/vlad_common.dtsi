@@ -105,5 +105,14 @@
 	};
 };
 
+&gpiote {
+	status = "okay";
+};
+
+&gpio0 {
+	status = "okay";
+};
+
+
 /* Include default memory partition configuration file */
 #include <common/nordic/nrf91xx_partition.dtsi>
