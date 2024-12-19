@@ -1,0 +1,8 @@
+# Copyright (c) 2024 Samy Francelet
+# SPDX-License-Identifier: Apache-2.0
+
+if !MCUBOOT
+config BOARD_VLAD_PMIC_STARTUP
+	bool "Startup code for the onboard nPM1300 PMIC"
+	default y
+endif # !MCUBOOT

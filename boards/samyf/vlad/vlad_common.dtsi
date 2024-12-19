@@ -1,0 +1,109 @@
+/*
+ * Copyright (c) 2024 Samy Francelet
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+#include "vlad_common-pinctrl.dtsi"
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+
+/ {
+	model = "Very Light Autonomous Device (VLAD)";
+	compatible = "samyf,vlad";
+
+	chosen {
+		zephyr,console = "uart0";
+		zephyr,shell-uart = "uart0";
+		zephyr,uart-mcumgr = "uart0";
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		led0: led_0 {
+			label = "led0";
+			gpios = <&gpio0 4 GPIO_ACTIVE_HIGH>;
+		};
+	};
+
+	// buttons {
+	// 	compatible = "gpio-keys";
+	// };
+
+	aliases {
+		led0 = &led0;
+	};
+};
+
+&uart0 {
+	status = "okay";
+
+	current-speed = <115200>;
+	pinctrl-0 = <&uart0_default>;
+	pinctrl-1 = <&uart0_sleep>;
+	pinctrl-names = "default", "sleep";
+};
+
+&i2c0 {
+	status = "okay";
+
+	pinctrl-0 = <&i2c0_default>;
+	pinctrl-1 = <&i2c0_sleep>;
+	pinctrl-names = "default", "sleep";
+
+	clock-frequency = <I2C_BITRATE_FAST>;
+
+	npm1300: pmic@6b {
+		compatible = "nordic,npm1300";
+		reg = <0x6b>;
+
+		npm1300_gpio: gpio-controller {
+			compatible = "nordic,npm1300-gpio";
+			gpio-controller;
+			#gpio-cells = <2>;
+			ngpios = <5>;
+		};
+
+		npm1300_leds: leds {
+			compatible = "nordic,npm1300-led";
+			nordic,led0-mode = "error";
+			nordic,led1-mode = "charging";
+			nordic,led2-mode = "host";
+		};
+
+		npm1300_regulators: regulators {
+			compatible = "nordic,npm1300-regulator";
+
+			npm1300_buck1: BUCK1 {
+				regulator-min-microvolt = <2700000>;
+				regulator-max-microvolt = <3300000>;
+				regulator-always-on;
+			};
+			
+			npm1300_buck2: BUCK2 {
+				regulator-min-microvolt = <3300000>;
+				regulator-max-microvolt = <3300000>;
+			};
+		};
+
+		npm1300_charger: charger {
+			compatible = "nordic,npm1300-charger";
+
+			term-microvolt = <4350000>;
+			term-warm-microvolt = <4000000>;
+
+			current-microamp = <720000>;
+			dischg-limit-microamp = <1340000>;
+
+			vbus-limit-microamp = <1000000>;
+
+			thermistor-ohms = <10000>;
+			thermistor-beta = <3380>;
+
+			charging-enable;
+		};
+	};
+};
+
+/* Include default memory partition configuration file */
+#include <common/nordic/nrf91xx_partition.dtsi>
