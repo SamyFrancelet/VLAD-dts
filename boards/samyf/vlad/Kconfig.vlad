@@ -3,3 +3,9 @@
 
 config BOARD_VLAD
 	select SOC_NRF9151_LACA
+
+if !MCUBOOT
+config BOARD_VLAD_PMIC_STARTUP
+	bool "Startup code for the onboard nPM1300 PMIC"
+	default y
+endif # !MCUBOOT

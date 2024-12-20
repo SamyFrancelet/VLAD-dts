@@ -12,27 +12,38 @@
 	compatible = "samyf,vlad";
 
 	chosen {
-		zephyr,console = "uart0";
-		zephyr,shell-uart = "uart0";
-		zephyr,uart-mcumgr = "uart0";
+		zephyr,console = &uart0;
+		zephyr,shell-uart = &uart0;
+		zephyr,uart-mcumgr = &uart0;
 	};
 
 	leds {
 		compatible = "gpio-leds";
 
 		led0: led_0 {
-			label = "led0";
 			gpios = <&gpio0 4 GPIO_ACTIVE_HIGH>;
+			label = "Green LED";
 		};
 	};
 
-	// buttons {
-	// 	compatible = "gpio-keys";
-	// };
-
 	aliases {
 		led0 = &led0;
+		bootloader-led0 = &led0;
+		mcuboot-led0 = &led0;
+		watchdog0 = &wdt0;
 	};
+};
+
+&adc {
+	status = "okay";
+};
+
+&gpiote {
+	status = "okay";
+};
+
+&gpio0 {
+	status = "okay";
 };
 
 &uart0 {
@@ -44,11 +55,20 @@
 	pinctrl-names = "default", "sleep";
 };
 
-&i2c0 {
+&uart1 {
 	status = "okay";
 
-	pinctrl-0 = <&i2c0_default>;
-	pinctrl-1 = <&i2c0_sleep>;
+	current-speed = <115200>;
+	pinctrl-0 = <&uart1_default>;
+	pinctrl-1 = <&uart1_sleep>;
+	pinctrl-names = "default", "sleep";
+};
+
+&i2c2 {
+	status = "okay";
+
+	pinctrl-0 = <&i2c2_default>;
+	pinctrl-1 = <&i2c2_sleep>;
 	pinctrl-names = "default", "sleep";
 
 	clock-frequency = <I2C_BITRATE_FAST>;
@@ -104,15 +124,6 @@
 		};
 	};
 };
-
-&gpiote {
-	status = "okay";
-};
-
-&gpio0 {
-	status = "okay";
-};
-
 
 /* Include default memory partition configuration file */
 #include <common/nordic/nrf91xx_partition.dtsi>
